@@ -1,0 +1,10 @@
+$ python manage.py sqlmigrate polls 0002
+BEGIN;
+--
+-- Add field owner to question
+--
+ALTER TABLE "polls_question" RENAME TO "polls_question__old";
+CREATE TABLE "polls_question" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "owner" varchar(24) NOT NULL, "question_text" varchar(200) NOT NULL, "pub_date" datetime NOT NULL);
+INSERT INTO "polls_question" ("id", "question_text", "pub_date", "owner") SELECT "id", "question_text", "pub_date", 'UserA' FROM "polls_question__old";
+DROP TABLE "polls_question__old";
+COMMIT;
