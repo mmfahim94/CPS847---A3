@@ -1,0 +1,10 @@
+Tenzins-Air:mysite tenzinnyendak$ python manage.py sqlmigrate polls 0002
+BEGIN;
+--
+-- Add field owner to question
+--
+ALTER TABLE "polls_question" RENAME TO "polls_question__old";
+CREATE TABLE "polls_question" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "owner" varchar(24) NOT NULL, "question_text" varchar(200) NOT NULL, "pub_date" datetime NOT NULL);
+INSERT INTO "polls_question" ("owner", "question_text", "pub_date", "id") SELECT '2017-04-14 16:19:33.740232+00:00', "question_text", "pub_date", "id" FROM "polls_question__old";
+DROP TABLE "polls_question__old";
+COMMIT;
